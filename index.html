@@ -1,62 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Capture Location</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Submission</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if geolocation is supported
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    // Get latitude and longitude from geolocation API
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+                    
+                    // Set the values in hidden fields
+                    document.getElementById('latitude').value = latitude;
+                    document.getElementById('longitude').value = longitude;
+                    
+                    // Submit the form
+                    document.getElementById('locationForm').submit();
+                }, function() {
+                    // Handle error
+                    alert('Unable to retrieve your location.');
+                });
+            } else {
+                // Handle case where geolocation is not supported
+                alert('Geolocation is not supported by this browser.');
+            }
+        });
+    </script>
 </head>
 <body>
-  <h1>Capture Your Location</h1>
-  <p id="status"></p>
-  <p id="location"></p>
-  <script>
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition, showError);
-      } else {
-        document.getElementById("status").innerText = "Geolocation is not supported by this browser.";
-      }
-    }
-
-    function showPosition(position) {
-      var lat = position.coords.latitude;
-      var lon = position.coords.longitude;
-      document.getElementById("location").innerText = "Latitude: " + lat + ", Longitude: " + lon;
-
-      // Send data to Google Form
-      sendLocationToForm(lat, lon);
-    }
-
-    function showError(error) {
-      switch(error.code) {
-        case error.PERMISSION_DENIED:
-          document.getElementById("status").innerText = "User denied the request for Geolocation.";
-          break;
-        case error.POSITION_UNAVAILABLE:
-          document.getElementById("status").innerText = "Location information is unavailable.";
-          break;
-        case error.TIMEOUT:
-          document.getElementById("status").innerText = "The request to get user location timed out.";
-          break;
-        case error.UNKNOWN_ERROR:
-          document.getElementById("status").innerText = "An unknown error occurred.";
-          break;
-      }
-    }
-
-    function sendLocationToForm(lat, lon) {
-      var formUrl = "https://forms.gle/nbm4D8ic3oRbaGY27"; // Your Google Form URL
-      var formData = {
-        "entry.610101942": lat, // Latitude field ID
-        "entry.1015638874": lon  // Longitude field ID
-      };
-
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", formUrl, true);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.send(Object.keys(formData).map(key => `${key}=${encodeURIComponent(formData[key])}`).join('&'));
-    }
-
-    // Automatically get the location when the page loads
-    window.onload = getLocation;
-  </script>
+    <h1>Location Submission</h1>
+    <form id="locationForm" action="https://docs.google.com/forms/d/e/1otvk9QxOSngaH-9aYjKoDz7r1n5OBXK5RWp9x0XePQU/formResponse" method="POST">
+        <input type="hidden" name="entry.610101942" id="latitude">
+        <input type="hidden" name="entry.1015638874" id="longitude">
+        <!-- The form is automatically submitted via JavaScript, no need for a visible submit button -->
+    </form>
+    <p>If you see this text, something went wrong. Ensure that you allow location access.</p>
 </body>
 </html>
