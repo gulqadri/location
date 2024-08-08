@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Capture Location</title>
+</head>
+<body>
+  <h1>Capture Your Location</h1>
+  <button onclick="getLocation()">Get Location</button>
+  <p id="status"></p>
+  <p id="location"></p>
+  <script>
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        document.getElementById("status").innerText = "Geolocation is not supported by this browser.";
+      }
+    }
+
+    function showPosition(position) {
+      var lat = position.coords.latitude;
+      var lon = position.coords.longitude;
+      document.getElementById("location").innerText = "Latitude: " + lat + ", Longitude: " + lon;
+
+      // Send data to Google Form
+      sendLocationToForm(lat, lon);
+    }
+
+    function showError(error) {
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          document.getElementById("status").innerText = "User denied the request for Geolocation.";
+          break;
+        case error.POSITION_UNAVAILABLE:
+          document.getElementById("status").innerText = "Location information is unavailable.";
+          break;
+        case error.TIMEOUT:
+          document.getElementById("status").innerText = "The request to get user location timed out.";
+          break;
+        case error.UNKNOWN_ERROR:
+          document.getElementById("status").innerText = "An unknown error occurred.";
+          break;
+      }
+    }
+
+    function sendLocationToForm(lat, lon) {
+      var formUrl = "YOUR_GOOGLE_FORM_URL"; // Replace with your Google Form URL
+      var formData = {
+        "entry.XXXXXX": lat, // Replace XXXXXX with the latitude field ID from Google Forms
+        "entry.YYYYYY": lon  // Replace YYYYYY with the longitude field ID from Google Forms
+      };
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", formUrl, true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhr.send(Object.keys(formData).map(key => `${key}=${encodeURIComponent(formData[key])}`).join('&'));
+    }
+  </script>
+</body>
+</html>
